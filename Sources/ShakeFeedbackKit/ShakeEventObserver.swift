@@ -1,11 +1,12 @@
 import UIKit
 import Combine
+import ObjectiveC
 
 /// Observer that detects device shake events without replacing the main window
 @MainActor
-class ShakeEventObserver: NSObject {
+public class ShakeEventObserver: NSObject {
     /// Handler to be called when a shake gesture is detected
-    var shakeHandler: (() -> Void)?
+    public var shakeHandler: (() -> Void)?
     private var notificationToken: NSObjectProtocol?
     
     override init() {
@@ -65,8 +66,8 @@ class ShakeEventObserver: NSObject {
 }
 
 // Define the notification name for shake events
-extension Notification.Name {
-    static let deviceDidShake = Notification.Name("deviceDidShakeNotification")
+public extension Notification.Name {
+    static public let deviceDidShake = Notification.Name("deviceDidShakeNotification")
 }
 
 // Extension to UIWindow to detect shake gestures
