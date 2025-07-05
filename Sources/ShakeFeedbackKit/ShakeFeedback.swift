@@ -7,6 +7,11 @@ public extension Notification.Name {
     static public let deviceDidShake = Notification.Name("deviceDidShakeNotification")
 }
 
+// Add shake detection at window level
+extension UIWindow {
+    // No custom code here
+}
+
 /// Super simple shake detection using built-in UIKit functionality
 @MainActor
 public class ShakeEventObserver: NSObject {
@@ -29,7 +34,7 @@ public class ShakeEventObserver: NSObject {
     }
 }
 
-/// Internal view controller that receives shake motion events
+@MainActor
 class ShakeViewController: UIViewController {
     var onShake: (() -> Void)?
     
@@ -50,12 +55,14 @@ class ShakeViewController: UIViewController {
         
         // Add to the root view controller when possible
         DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             if let window = UIApplication.shared.windows.first,
                let rootVC = window.rootViewController {
-                rootVC.addChild(self!)
-                rootVC.view.addSubview(self!.view)
-                self!.didMove(toParent: rootVC)
-                self!.becomeFirstResponder()
+                rootVC.addChild(self)
+                rootVC.view.addSubview(self.view)
+                self.didMove(toParent: rootVC)
+                self.becomeFirstResponder()
                 print("ShakeFeedbackKit: Shake detector installed")
             }
         }
@@ -176,7 +183,12 @@ public enum ShakeFeedback {
         let hostingController = UIHostingController(rootView: composer)
         let navController = UINavigationController(rootViewController: hostingController)
         navController.modalPresentationStyle = .fullScreen
-        rootViewController.present(navController, animated: true)
+        
+        // Find the topmost view controller to present on
+        let topmostController = findTopmostViewController(from: rootViewController)
+        topmostController.dismiss(animated: false) { // Dismiss any currently presented view controller first
+            rootViewController.present(navController, animated: true)
+        }
     }
     
     @MainActor
@@ -213,5 +225,31 @@ public enum ShakeFeedback {
                 label.removeFromSuperview()
             })
         })
+    }
+    
+    // Find the topmost presented view controller
+    @MainActor
+    private static func findTopmostViewController(from viewController: UIViewController) -> UIViewController {
+        // If the view controller is presenting something, return the presented view controller
+        if let presentedViewController = viewController.presentedViewController {
+            return findTopmostViewController(from: presentedViewController)
+        }
+        
+        // For tab bar controllers, find the selected tab
+        if let tabBarController = viewController as? UITabBarController,
+           let selectedViewController = tabBarController.selectedViewController {
+            return findTopmostViewController(from: selectedViewController)
+        }
+        
+        // For navigation controllers, find the visible view controller
+        if let navigationController = viewController as? UINavigationController,
+           let visibleViewController = navigationController.visibleViewController {
+            return findTopmostViewController(from: visibleViewController)
+        }
+        
+        // Handle other container view controllers here if needed
+        
+        // We've reached a leaf view controller with nothing being presented
+        return viewController
     }
 }
