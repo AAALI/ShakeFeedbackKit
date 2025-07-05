@@ -16,7 +16,7 @@ Add ShakeFeedbackKit to your project using Swift Package Manager.
 
 In Xcode:
 1. Go to File > Add Packages...
-2. Enter the repository URL
+2. Enter the repository URL: `https://github.com/AAALI/ShakeFeedbackKit.git`
 3. Select the version you want to use
 
 ## Step 2: Initialize the SDK

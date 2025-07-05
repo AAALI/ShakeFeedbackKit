@@ -24,14 +24,14 @@ A Swift package that enables easy integration of a shake-to-feedback system in i
 Add ShakeFeedbackKit to your project using Swift Package Manager:
 
 1. In Xcode, select File > Add Packages...
-2. Enter the repository URL: `https://github.com/yourusername/ShakeFeedbackKit.git`
+2. Enter the repository URL: `https://github.com/AAALI/ShakeFeedbackKit.git`
 3. Select the version you want to use
 
 Alternatively, add it as a dependency in your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/ShakeFeedbackKit.git", from: "1.0.0")
+    .package(url: "https://github.com/AAALI/ShakeFeedbackKit.git", from: "1.0.0")
 ]
 ```
 
