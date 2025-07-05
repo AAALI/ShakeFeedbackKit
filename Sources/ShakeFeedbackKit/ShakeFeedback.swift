@@ -2,6 +2,110 @@ import UIKit
 import SwiftUI
 import Combine
 
+// Define the notification name for shake gestures
+public extension Notification.Name {
+    static public let deviceDidShake = Notification.Name("deviceDidShakeNotification")
+}
+
+/// Super simple shake detection using built-in UIKit functionality
+@MainActor
+public class ShakeEventObserver: NSObject {
+    public var shakeHandler: (() -> Void)?
+    
+    // Simple controller that can detect device shaking
+    private let shakeController = ShakeViewController()
+    
+    public override init() {
+        super.init()
+        shakeController.onShake = { [weak self] in
+            self?.shakeHandler?()
+        }
+        setupShakeDetection()
+    }
+    
+    private func setupShakeDetection() {
+        // No need to do anything else - ShakeViewController handles detection
+        print("ShakeFeedbackKit: Shake detection ready")
+    }
+}
+
+/// Internal view controller that receives shake motion events
+class ShakeViewController: UIViewController {
+    var onShake: (() -> Void)?
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    private func setup() {
+        // Create a minimal view
+        view = UIView(frame: .zero)
+        view.isHidden = true
+        
+        // Add to the root view controller when possible
+        DispatchQueue.main.async { [weak self] in
+            if let window = UIApplication.shared.windows.first,
+               let rootVC = window.rootViewController {
+                rootVC.addChild(self!)
+                rootVC.view.addSubview(self!.view)
+                self!.didMove(toParent: rootVC)
+                self!.becomeFirstResponder()
+                print("ShakeFeedbackKit: Shake detector installed")
+            }
+        }
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        becomeFirstResponder()
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        if motion == .motionShake {
+            print("ShakeFeedbackKit: Shake detected")
+            onShake?()
+            NotificationCenter.default.post(name: .deviceDidShake, object: nil)
+        }
+    }
+}
+
+// Simple view controller that becomes first responder to detect shakes
+class ShakeDetectionViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.isUserInteractionEnabled = false
+        becomeFirstResponder()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        becomeFirstResponder()
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            print("ShakeFeedbackKit: Shake detected")
+            NotificationCenter.default.post(name: .deviceDidShake, object: nil)
+        }
+        super.motionEnded(motion, with: event)
+    }
+}
+
 /// Shake gesture feedback system compatible with both UIKit and SwiftUI apps
 public enum ShakeFeedback {
     @MainActor private static var jiraClient: JiraClient?
