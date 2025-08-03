@@ -14,7 +14,7 @@ A powerful Swift package that enables easy integration of a shake-to-feedback sy
 
 ### 🎨 Advanced Annotation System
 - **🖊️ Drawing Tools**: Pen and highlighter tools for precise annotations
-- **🎨 Color Picker**: 6 predefined colors (Red, Blue, Green, Orange, Purple, Black)
+- **🎨 Color Options**: 3 carefully chosen colors (Red pen, Blue pen, Yellow highlighter)
 - **💾 Persistent State**: Annotations persist across sessions - edit anytime!
 - **↩️ Comprehensive Undo**: Undo functionality for all annotations (current + previous sessions)
 - **🗑️ Clear All**: Clear all annotations with confirmation dialog
@@ -124,13 +124,10 @@ The annotation system provides a seamless experience:
 
 ### Color Options
 
-Choose from 6 carefully selected colors:
-- 🔴 **Red**: Critical issues, errors, bugs
-- 🔵 **Blue**: Information, notes, suggestions
-- 🟢 **Green**: Positive feedback, working features
-- 🟠 **Orange**: Warnings, improvements needed
-- 🟣 **Purple**: Questions, unclear behavior
-- ⚫ **Black**: General annotations, neutral marking
+Choose from 3 carefully selected colors:
+- 🔴 **Red Pen**: Critical issues, errors, bugs (4pt precise drawing)
+- 🔵 **Blue Pen**: Information, notes, suggestions (4pt precise drawing)
+- 🖍 **Yellow Highlighter**: Highlighting areas, general marking (20pt broad strokes with transparency)
 
 ### Annotation Persistence
 
@@ -148,11 +145,11 @@ Choose from 6 carefully selected colors:
 
 ### Best Practices
 
-1. **Use Red for Critical Issues**: Mark bugs, crashes, or broken functionality
-2. **Use Blue for Information**: Add explanatory notes or context
-3. **Use Highlighter for Areas**: Mark general regions rather than specific points
-4. **Use Pen for Precision**: Point to exact UI elements or text
-5. **Combine Tools**: Use both pen and highlighter for comprehensive feedback
+1. **Use Red Pen for Critical Issues**: Mark bugs, crashes, or broken functionality with precise 4pt strokes
+2. **Use Blue Pen for Information**: Add explanatory notes, arrows, or context with precise 4pt strokes
+3. **Use Yellow Highlighter for Areas**: Mark general regions, sections, or broad areas with 20pt transparent strokes
+4. **Combine Tools**: Use both pen colors for precision and highlighter for broader context
+5. **Layer Annotations**: Start with highlighter for areas, then add pen details for specifics
 
 ### Example Annotation Workflows
 
@@ -162,14 +159,15 @@ Choose from 6 carefully selected colors:
 3. Add text description: "Button doesn't respond to taps"
 
 **Feature Request**:
-1. Use orange highlighter to mark the area for improvement
+1. Use yellow highlighter to mark the area for improvement
 2. Use blue pen to sketch the desired change
 3. Add text description: "Add search functionality here"
 
 **UI Feedback**:
-1. Use purple highlighter to mark confusing sections
-2. Use green pen to mark what works well
-3. Add comprehensive text feedback
+1. Use yellow highlighter to mark confusing sections
+2. Use blue pen to add detailed notes and suggestions
+3. Use red pen to mark critical issues
+4. Add comprehensive text feedback
 
 ## Advanced Usage
 
